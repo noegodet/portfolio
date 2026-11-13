@@ -3,19 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { locales, sectionPath, sections, type Locale, type Section } from "@/i18n/config";
+import {
+  locales,
+  navDirection,
+  sectionFromPath,
+  sectionPath,
+  sections,
+  type Locale,
+  type Section,
+} from "@/i18n/config";
 
 type TabsProps = {
   lang: Locale;
   labels: Record<Section, string>;
   navLabel: string;
 };
-
-/** Section correspondant à l'adresse courante (`/fr/experience` → "experience"). */
-function sectionFromPath(pathname: string): Section {
-  const segment = pathname.split("/")[2] ?? "";
-  return (sections as readonly string[]).includes(segment) ? (segment as Section) : "home";
-}
 
 /** Onglets de navigation, présentés comme les onglets d'un éditeur de code. */
 export function NavTabs({ lang, labels, navLabel, active }: TabsProps & { active: Section | null }) {
@@ -42,13 +44,20 @@ export function NavTabs({ lang, labels, navLabel, active }: TabsProps & { active
               <Link
                 ref={isActive ? activeRef : undefined}
                 href={sectionPath(section, lang)}
+                transitionTypes={navDirection(active, section)}
                 aria-current={isActive ? "page" : undefined}
-                className={`relative flex h-11 items-center gap-2 whitespace-nowrap border-b-2 px-3 font-mono text-[0.82rem] transition-colors sm:px-4 md:h-14 ${
-                  isActive
-                    ? "border-accent text-fg"
-                    : "border-transparent text-muted hover:border-line hover:text-fg"
+                className={`relative flex h-11 items-center gap-2 whitespace-nowrap border-b-2 border-transparent px-3 font-mono text-[0.82rem] transition-colors sm:px-4 md:h-14 ${
+                  isActive ? "text-fg" : "text-muted hover:border-line hover:text-fg"
                 }`}
               >
+                {/* Soulignement de l'onglet actif : il glisse d'un onglet à l'autre au changement de page. */}
+                {isActive && (
+                  <span
+                    aria-hidden="true"
+                    style={{ viewTransitionName: "tab-indicator" }}
+                    className="absolute inset-x-0 -bottom-0.5 h-0.5 bg-accent shadow-[0_0_12px_var(--color-accent-strong)]"
+                  />
+                )}
                 <span className={isActive ? "text-accent" : "text-faint"} aria-hidden="true">
                   0{index + 1}
                 </span>

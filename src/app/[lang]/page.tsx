@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import portrait from "@/assets/portrait.webp";
+import { Scramble } from "@/components/Effects";
 import { Reveal } from "@/components/Reveal";
 import { Chip, Icon, NextLink, PageShell, Prompt, SectionHeading, StatusBadge } from "@/components/ui";
 import { education, profile, skills } from "@/content/profile";
 import { getDictionary } from "@/content/ui";
-import { isLocale, sectionPath, tr } from "@/i18n/config";
+import { isLocale, sectionPath, raw, tr } from "@/i18n/config";
 import { getCvHref } from "@/lib/cv";
 import { alternatesFor } from "@/lib/site";
 
@@ -34,7 +35,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         <div>
           <Prompt command={t.command} typed />
           <h1 className="mt-4 animate-rise text-5xl font-semibold tracking-tight sm:text-7xl">
-            {profile.name}
+            <Scramble key={profile.name} text={profile.name} />
           </h1>
           <p className="mt-4 animate-rise text-xl text-muted text-balance [animation-delay:40ms] sm:text-2xl">
             {profile.role[lang]}
@@ -151,7 +152,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           {skills.map((group, index) => (
             <Reveal
               key={group.title.fr}
-              delay={(index % 4) * 0.06}
+              delay={(index % 4) * 0.09}
               className={group.wide ? "sm:col-span-2" : undefined}
             >
               <div
@@ -164,7 +165,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
                 </h3>
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {group.items.map((item) => (
-                    <Chip key={tr(item, "fr")}>{tr(item, lang)}</Chip>
+                    <Chip key={tr(item, "fr")} text={raw(item, lang)} />
                   ))}
                 </ul>
                 {group.note && (
@@ -186,7 +187,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         <ol className="mt-8 grid gap-4 lg:grid-cols-3">
           {education.map((school, index) => (
             <li key={school.school}>
-              <Reveal delay={index * 0.08} className="h-full">
+              <Reveal delay={index * 0.13} className="h-full">
                 <article className="flex h-full flex-col p-6 panel">
                   <div className="flex h-16 items-center justify-between gap-4">
                     <Image

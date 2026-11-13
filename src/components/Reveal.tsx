@@ -12,7 +12,11 @@ export function MotionProvider({ children }: { children: ReactNode }) {
   return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
 }
 
-/** Fait apparaître son contenu en douceur quand il entre dans l'écran. */
+/**
+ * Fait apparaître son contenu quand il entre dans l'écran : il monte, grandit
+ * légèrement et passe du flou au net. `delay` (en secondes) décale les
+ * éléments d'une même rangée pour qu'ils arrivent en cascade.
+ */
 export function Reveal({
   children,
   delay = 0,
@@ -25,10 +29,10 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 32, scale: 0.97, filter: "blur(10px)" }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>

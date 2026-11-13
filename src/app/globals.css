@@ -80,7 +80,8 @@ html {
 }
 
 body {
-  background-color: var(--color-bg);
+  /* Pas de couleur de fond ici (elle est sur <html>) : le canevas du flux de
+     données, placé derrière le contenu, doit rester visible. */
   color: var(--color-fg);
   font-family: var(--font-sans);
   /* Halo violet en haut de page + trame de points façon papier millimétré. */
@@ -117,10 +118,34 @@ html:has(dialog[open]) {
 /* ---------------------------------------------------------------------------
    Briques réutilisables
 --------------------------------------------------------------------------- */
+/* Intensité du halo qui suit le curseur dans une carte (0 = éteint). Déclarée
+   comme nombre pour pouvoir s'allumer et s'éteindre en fondu. */
+@property --glow {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
 @utility panel {
   border: 1px solid var(--color-line);
-  background: color-mix(in oklab, var(--color-surface) 88%, transparent);
+  background-color: color-mix(in oklab, var(--color-surface) 88%, transparent);
+  /* --glow-x / --glow-y : position du curseur, fournie par PointerGlow (Effects.tsx). */
+  background-image: radial-gradient(
+    26rem circle at var(--glow-x, 50%) var(--glow-y, 0%),
+    rgb(139 92 246 / var(--glow)),
+    transparent 65%
+  );
   border-radius: 0.9rem;
+  transition:
+    --glow 0.4s ease,
+    border-color 0.3s ease;
+
+  @media (hover: hover) {
+    &:hover {
+      --glow: 0.16;
+      border-color: color-mix(in oklab, var(--color-accent) 45%, var(--color-line));
+    }
+  }
 }
 
 @utility label-mono {
@@ -152,6 +177,54 @@ html:has(dialog[open]) {
   animation:
     240ms ease-out 110ms both vt-fade,
     380ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both vt-rise;
+}
+
+/* Glissement directionnel entre onglets : la page sortante part d'un côté,
+   la nouvelle arrive de l'autre (--slide = décalage de départ ou d'arrivée). */
+::view-transition-old(.slide-out-forward),
+::view-transition-old(.slide-out-back) {
+  animation:
+    160ms ease-in both vt-fade reverse,
+    320ms cubic-bezier(0.4, 0, 1, 1) both vt-slide reverse;
+}
+
+::view-transition-new(.slide-in-forward),
+::view-transition-new(.slide-in-back) {
+  animation:
+    260ms ease-out 130ms both vt-fade,
+    520ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both vt-slide;
+}
+
+::view-transition-old(.slide-out-forward) {
+  --slide: -72px;
+}
+
+::view-transition-new(.slide-in-forward) {
+  --slide: 72px;
+}
+
+::view-transition-old(.slide-out-back) {
+  --slide: 72px;
+}
+
+::view-transition-new(.slide-in-back) {
+  --slide: -72px;
+}
+
+@keyframes vt-slide {
+  from {
+    translate: var(--slide) 0;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+/* Le soulignement de l'onglet actif glisse d'un onglet à l'autre, au-dessus de l'en-tête. */
+::view-transition-group(tab-indicator) {
+  z-index: 101;
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* L'en-tête reste fixe pendant qu'une page remplace l'autre. */

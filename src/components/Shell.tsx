@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { profile } from "@/content/profile";
 import type { Dictionary } from "@/content/ui";
 import { sections, type Locale, type Section } from "@/i18n/config";
+import { ScrollProgress } from "./Effects";
 import { ActiveNavTabs, LangLinks, LangSwitch, NavTabs } from "./Nav";
 import { TerminalButton } from "./Terminal";
 
@@ -32,6 +33,7 @@ export function Header({ lang, dict }: { lang: Locale; dict: Dictionary }) {
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 px-5 sm:px-8">
         <Link
           href={`/${lang}`}
+          transitionTypes={["nav-back"]}
           className="flex h-12 items-center font-mono text-sm font-medium text-fg md:h-14"
         >
           <span className="text-accent">~/</span>noe-godet
@@ -51,6 +53,7 @@ export function Header({ lang, dict }: { lang: Locale; dict: Dictionary }) {
           <TerminalButton label={dict.nav.openTerminal} />
         </div>
       </div>
+      <ScrollProgress />
     </header>
   );
 }

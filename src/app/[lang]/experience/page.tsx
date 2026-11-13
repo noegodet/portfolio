@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
+import { Metric } from "@/components/Effects";
 import { Reveal } from "@/components/Reveal";
 import { Chip, NextLink, PageShell, SectionHeading } from "@/components/ui";
 import { experiences } from "@/content/experiences";
 import { getDictionary } from "@/content/ui";
 import { alternatesFor } from "@/lib/site";
-import { isLocale, sectionPath, tr } from "@/i18n/config";
+import { isLocale, sectionPath, raw, tr } from "@/i18n/config";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/experience">): Promise<Metadata> {
   const { lang } = await params;
@@ -65,20 +66,11 @@ export default async function ExperiencePage({ params }: PageProps<"/[lang]/expe
                 <p className="mt-3 text-muted">{experience.context[lang]}</p>
 
                 {experience.metric && (
-                  <p className="mt-6 flex flex-wrap items-baseline gap-x-4 gap-y-1 rounded-xl border border-accent/40 bg-accent/10 px-5 py-4">
-                    <span className="font-mono text-2xl text-muted line-through decoration-faint sm:text-3xl">
-                      {experience.metric.before[lang]}
-                    </span>
-                    <span className="font-mono text-2xl text-accent sm:text-3xl" aria-hidden="true">
-                      →
-                    </span>
-                    <span className="font-mono text-3xl font-semibold text-fg sm:text-4xl">
-                      {experience.metric.after[lang]}
-                    </span>
-                    <span className="w-full text-sm text-muted sm:w-auto">
-                      {experience.metric.caption[lang]}
-                    </span>
-                  </p>
+                  <Metric
+                    before={experience.metric.before[lang]}
+                    after={experience.metric.after[lang]}
+                    caption={experience.metric.caption[lang]}
+                  />
                 )}
 
                 <h3 className="mt-7 label-mono">{t.missions}</h3>
@@ -96,7 +88,7 @@ export default async function ExperiencePage({ params }: PageProps<"/[lang]/expe
                 <h3 className="mt-7 label-mono">{t.stack}</h3>
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {experience.stack.map((item) => (
-                    <Chip key={tr(item, "fr")}>{tr(item, lang)}</Chip>
+                    <Chip key={tr(item, "fr")} text={raw(item, lang)} />
                   ))}
                 </ul>
                 {experience.stackNote && (

@@ -124,7 +124,7 @@ export const skills: SkillGroup[] = [
     wide: true,
     items: [
       { fr: "Français — langue maternelle", en: "French — native" },
-      { fr: "Anglais B2+ — TOEIC 850/990 (2026)", en: "English B2+ — TOEIC 850/990 (2026)" },
+      { fr: "Anglais B2+ — TOEIC {850}/990 (2026)", en: "English B2+ — TOEIC {850}/990 (2026)" },
     ],
   },
 ];

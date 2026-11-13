@@ -1,10 +1,19 @@
 import Link from "next/link";
 import { ViewTransition, type CSSProperties, type ReactNode } from "react";
+import { Counted, Scramble } from "./Effects";
+
+/**
+ * Transition selon le sens de navigation : vers un onglet situé à droite la
+ * page glisse vers la gauche, et inversement. Sans sens connu (bouton retour
+ * du navigateur, changement de langue), un simple fondu.
+ */
+const pageEnter = { "nav-forward": "slide-in-forward", "nav-back": "slide-in-back", default: "page-in" };
+const pageExit = { "nav-forward": "slide-out-forward", "nav-back": "slide-out-back", default: "page-out" };
 
 /** Enveloppe de chaque page : largeur, marges et transition d'entrée/sortie. */
 export function PageShell({ children }: { children: ReactNode }) {
   return (
-    <ViewTransition enter="page-in" exit="page-out" default="none">
+    <ViewTransition enter={pageEnter} exit={pageExit} default="none">
       <main id="content" className="mx-auto w-full max-w-6xl flex-1 px-5 pb-24 pt-10 sm:px-8 md:pt-16">
         {children}
       </main>
@@ -61,18 +70,18 @@ export function SectionHeading({
             : "mt-2 text-2xl font-semibold tracking-tight sm:text-3xl"
         }
       >
-        {title}
+        <Scramble key={title} text={title} />
       </Tag>
       {intro && <p className="mt-4 text-lg leading-relaxed text-muted text-pretty">{intro}</p>}
     </div>
   );
 }
 
-/** Étiquette de techno ou de compétence. */
-export function Chip({ children }: { children: ReactNode }) {
+/** Étiquette de techno ou de compétence. Un nombre entre accolades dans `text` est animé. */
+export function Chip({ text }: { text: string }) {
   return (
-    <li className="rounded-md border border-line bg-raised/70 px-2.5 py-1 font-mono text-[0.8rem] leading-5 text-fg/90">
-      {children}
+    <li className="rounded-md border border-line bg-raised/70 px-2.5 py-1 font-mono text-[0.8rem] leading-5 text-fg/90 transition-colors hover:border-accent/50">
+      {text.includes("{") ? <Counted text={text} /> : text}
     </li>
   );
 }
@@ -114,6 +123,7 @@ export function NextLink({
   return (
     <Link
       href={href}
+      transitionTypes={["nav-forward"]}
       className="group mt-20 flex items-center justify-between gap-6 panel px-6 py-5 transition-colors hover:border-accent/60"
     >
       <span>

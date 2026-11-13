@@ -14,7 +14,7 @@ export const metadata: Metadata = {
  */
 export default function GlobalNotFound() {
   return (
-    <html lang="fr" className={`${fontClasses} h-full antialiased`}>
+    <html lang="fr" data-scroll-behavior="smooth" className={`${fontClasses} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <NotFoundContent />
       </body>

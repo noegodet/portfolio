@@ -12,7 +12,7 @@ export type Experience = {
   period: Localized;
   duration: Localized;
   context: Localized;
-  /** Chiffre clé mis en avant en haut de la fiche (facultatif). */
+  /** Chiffre clé mis en avant en haut de la fiche (facultatif). Un nombre entre accolades est animé. */
   metric?: { before: Localized; after: Localized; caption: Localized };
   missions: Localized[];
   stack: Text[];
@@ -35,7 +35,7 @@ export const experiences: Experience[] = [
       en: "Team of 3 engineering students, working for the director of the Valence and Avignon agencies.",
     },
     metric: {
-      before: { fr: "1,5 jour", en: "1.5 days" },
+      before: { fr: "{1,5} jour", en: "{1.5} days" },
       after: { fr: "< 1 heure", en: "< 1 hour" },
       caption: {
         fr: "pour produire un avis de valeur immobilier",

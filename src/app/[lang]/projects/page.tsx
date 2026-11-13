@@ -6,7 +6,7 @@ import { profile } from "@/content/profile";
 import { projects, type ProjectStatus } from "@/content/projects";
 import { getDictionary } from "@/content/ui";
 import { alternatesFor } from "@/lib/site";
-import { isLocale, tr } from "@/i18n/config";
+import { isLocale, raw, tr } from "@/i18n/config";
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/projects">): Promise<Metadata> {
   const { lang } = await params;
@@ -92,7 +92,7 @@ export default async function ProjectsPage({ params }: PageProps<"/[lang]/projec
                   <p className="mt-3 flex-1 leading-relaxed text-muted">{project.summary[lang]}</p>
                   <ul className="mt-5 flex flex-wrap gap-2">
                     {project.stack.map((item) => (
-                      <Chip key={tr(item, "fr")}>{tr(item, lang)}</Chip>
+                      <Chip key={tr(item, "fr")} text={raw(item, lang)} />
                     ))}
                   </ul>
                   {(project.repo || project.demo) && (

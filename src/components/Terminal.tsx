@@ -14,7 +14,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Dictionary } from "@/content/ui";
-import { isLocale, type Locale, type Section } from "@/i18n/config";
+import { isLocale, navDirection, sectionFromPath, type Locale, type Section } from "@/i18n/config";
 import { Icon } from "./ui";
 
 /** Données déjà traduites, préparées côté serveur par le layout. */
@@ -124,7 +124,8 @@ export function TerminalProvider({ data, children }: { data: TerminalData; child
   const goTo = useCallback(
     (path: string) => {
       print({ kind: "success", text: `${dict.opening} ${path}` });
-      router.push(path);
+      const from = sectionFromPath(window.location.pathname);
+      router.push(path, { transitionTypes: navDirection(from, sectionFromPath(path)) });
       closeTimer.current = setTimeout(close, 450);
     },
     [close, dict.opening, print, router],

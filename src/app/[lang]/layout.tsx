@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { DataFlow, PointerGlow } from "@/components/Effects";
 import { MotionProvider } from "@/components/Reveal";
 import { Footer, Header } from "@/components/Shell";
 import { TerminalProvider, type TerminalData } from "@/components/Terminal";
@@ -71,7 +72,7 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   // demandée déclenche alors la 404, affichée par not-found.tsx.
   if (!isLocale(lang)) {
     return (
-      <html lang={defaultLocale} className={`${fontClasses} h-full antialiased`}>
+      <html lang={defaultLocale} data-scroll-behavior="smooth" className={`${fontClasses} h-full antialiased`}>
         <body className="flex min-h-full flex-col">{children}</body>
       </html>
     );
@@ -80,8 +81,10 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
   const dict = getDictionary(lang);
 
   return (
-    <html lang={lang} className={`${fontClasses} h-full antialiased`}>
+    <html lang={lang} data-scroll-behavior="smooth" className={`${fontClasses} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
+        <DataFlow />
+        <PointerGlow />
         <MotionProvider>
           <TerminalProvider data={terminalData(lang)}>
             <Header lang={lang} dict={dict} />
