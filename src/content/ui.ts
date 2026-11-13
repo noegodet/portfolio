@@ -80,7 +80,7 @@ const fr = {
     credit: "Photo",
   },
   footer: {
-    builtWith: "Conçu et développé avec Claude Code",
+    builtWith: "Conçu et développé avec l'aide de Claude Code",
     stack: "Next.js · TypeScript · Tailwind CSS",
   },
   terminal: {
@@ -193,7 +193,7 @@ const en: typeof fr = {
     credit: "Photo",
   },
   footer: {
-    builtWith: "Designed and built with Claude Code",
+    builtWith: "Designed and built with the help of Claude Code",
     stack: "Next.js · TypeScript · Tailwind CSS",
   },
   terminal: {

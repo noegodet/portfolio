@@ -1,7 +1,7 @@
 # Portfolio — Noé Godet
 
 Site personnel de Noé Godet, élève-ingénieur en data, IA et développement à Grenoble INP - Esisar.
-Bilingue (français / anglais), conçu et développé avec [Claude Code](https://claude.com/claude-code).
+Bilingue (français / anglais), conçu et développé avec l'aide de [Claude Code](https://claude.com/claude-code).
 
 > 🎯 À la recherche d'un stage de fin d'études de 6 mois en data, IA ou développement, à partir de février 2027.
 
