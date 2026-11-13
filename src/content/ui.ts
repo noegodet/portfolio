@@ -61,11 +61,11 @@ const fr = {
   },
   projects: {
     command: "projects --status",
-    title: "Projets personnels",
-    intro: "Mes projets personnels, menés en parallèle de mes études.",
+    title: "Projets",
+    intro: "Projets de recherche et projets personnels, en cours ou à venir.",
     emptyTitle: "Projets en cours de développement",
     emptyBody:
-      "Plusieurs projets personnels sont en chantier. Ils seront présentés ici dès qu'ils seront montrables — en attendant, mon GitHub donne un aperçu du travail en cours.",
+      "Plusieurs projets sont en chantier. Ils seront présentés ici dès qu'ils seront montrables — en attendant, mon GitHub donne un aperçu du travail en cours.",
     emptyLog: ["analyse du dépôt…", "compilation des projets…", "publication : bientôt"],
     githubCta: "Voir mon GitHub",
     status: { "in-progress": "en cours", shipped: "livré", paused: "en pause" },
@@ -174,11 +174,11 @@ const en: typeof fr = {
   },
   projects: {
     command: "projects --status",
-    title: "Personal projects",
-    intro: "My personal projects, built alongside my studies.",
+    title: "Projects",
+    intro: "Research and personal projects, ongoing or upcoming.",
     emptyTitle: "Projects in development",
     emptyBody:
-      "Several personal projects are under construction. They will be showcased here as soon as they are ready to show — in the meantime, my GitHub gives a glimpse of the work in progress.",
+      "Several projects are under construction. They will be showcased here as soon as they are ready to show — in the meantime, my GitHub gives a glimpse of the work in progress.",
     emptyLog: ["scanning repository…", "building projects…", "release: coming soon"],
     githubCta: "Visit my GitHub",
     status: { "in-progress": "in progress", shipped: "shipped", paused: "paused" },

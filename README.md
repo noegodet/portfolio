@@ -1,6 +1,8 @@
 # Portfolio — Noé Godet
 
 Site personnel de Noé Godet, élève-ingénieur en data, IA et développement à Grenoble INP - Esisar.
+**En ligne : [portfolio-noegodet.vercel.app](https://portfolio-noegodet.vercel.app)**
+
 Bilingue (français / anglais), conçu et développé avec l'aide de [Claude Code](https://claude.com/claude-code).
 
 > 🎯 À la recherche d'un stage de fin d'études de 6 mois en data, IA ou développement, à partir de février 2027.
@@ -11,8 +13,8 @@ Bilingue (français / anglais), conçu et développé avec l'aide de [Claude Cod
 |---|---|
 | **Accueil** | Présentation, statut, compétences et formation |
 | **Expériences** | Projet industriel Arthur Loyd et stage chez DXC Technology |
-| **Vie associative** | Présidence du BDE et roadmap des événements, avec galerie photo |
-| **Projets** | Projets personnels en cours de développement |
+| **Vie associative** | Présidence du BDE et roadmap des événements (gala, 30 ans du BDE, Challenge de l'étudiant), avec galerie photo |
+| **Projets** | Projet de recherche sur la fiabilité du text-to-SQL, et projets à venir |
 
 ## Fonctionnalités
 
@@ -72,10 +74,10 @@ Chaque texte existe en français (`fr`) et en anglais (`en`) dans `src/content/`
 | `profile.ts` | Identité, statut, liens, compétences, formation |
 | `experiences.ts` | Expériences professionnelles |
 | `association.ts` | Présidence du BDE et roadmap des événements |
-| `projects.ts` | Projets personnels (un modèle à copier est en tête du fichier) |
+| `projects.ts` | Projets (un modèle à copier est en tête du fichier) |
 | `ui.ts` | Libellés de l'interface : menus, boutons, titres, terminal |
 
-- Les textes marqués `draft: true` s'affichent avec une étiquette « à compléter ». Une fois le texte définitif écrit, supprimer cette ligne.
+- Un texte encore provisoire peut être marqué `draft: true` : il s'affiche alors avec une étiquette « à compléter ».
 - Un nombre entre accolades, par exemple `"TOEIC {850}/990"`, s'anime à l'écran.
 
 ### Ajouter le CV téléchargeable
@@ -98,7 +100,7 @@ Il est exclu de git (`.gitignore`) et ne doit jamais être publié.
 
 ### Mise en ligne
 
-Le site est compatible avec Vercel sans réglage.
+Le site est hébergé sur Vercel : chaque `git push` sur `main` le met à jour automatiquement.
 Sur un autre hébergeur, définir la variable d'environnement `NEXT_PUBLIC_SITE_URL`
 avec l'adresse publique du site (ex. `https://noegodet.fr`) pour activer les balises SEO.
 

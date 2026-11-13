@@ -39,12 +39,14 @@ export function Gallery({ photos, dict }: { photos: GalleryPhoto[]; dict: Dictio
 
   if (count === 0) return null;
   const current = photos[index];
+  // Deux photos : côte à côte. Sinon : une grande photo puis une rangée de vignettes.
+  const pair = count === 2;
 
   return (
     <>
-      <ul className="grid grid-cols-3 gap-2 sm:gap-3">
+      <ul className={`grid gap-2 sm:gap-3 ${pair ? "grid-cols-2" : "grid-cols-3"}`}>
         {photos.map((photo, position) => (
-          <li key={photo.src.src} className={position === 0 ? "col-span-3" : undefined}>
+          <li key={photo.src.src} className={position === 0 && !pair ? "col-span-3" : undefined}>
             <button
               type="button"
               onClick={() => show(position)}
@@ -55,7 +57,13 @@ export function Gallery({ photos, dict }: { photos: GalleryPhoto[]; dict: Dictio
                 src={photo.src}
                 alt={photo.alt}
                 placeholder="blur"
-                sizes={position === 0 ? "(min-width: 1024px) 720px, 100vw" : "(min-width: 1024px) 240px, 33vw"}
+                sizes={
+                  pair
+                    ? "(min-width: 1024px) 360px, 50vw"
+                    : position === 0
+                      ? "(min-width: 1024px) 720px, 100vw"
+                      : "(min-width: 1024px) 240px, 33vw"
+                }
                 className="aspect-[3/2] w-full object-cover transition duration-500 group-hover:scale-[1.03]"
               />
               <span

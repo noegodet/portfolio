@@ -76,7 +76,7 @@ export default async function ProjectsPage({ params }: PageProps<"/[lang]/projec
           </section>
         </div>
       ) : (
-        <ul className="mt-12 grid gap-4 md:grid-cols-2">
+        <ul className={`mt-12 grid gap-4 ${projects.length > 1 ? "md:grid-cols-2" : ""}`}>
           {projects.map((project, index) => (
             <li key={project.id}>
               <Reveal delay={(index % 2) * 0.08} className="h-full">
@@ -89,12 +89,17 @@ export default async function ProjectsPage({ params }: PageProps<"/[lang]/projec
                       {t.status[project.status]}
                     </span>
                   </div>
-                  <p className="mt-3 flex-1 leading-relaxed text-muted">{project.summary[lang]}</p>
-                  <ul className="mt-5 flex flex-wrap gap-2">
-                    {project.stack.map((item) => (
-                      <Chip key={tr(item, "fr")} text={raw(item, lang)} />
-                    ))}
-                  </ul>
+                  {project.context && (
+                    <p className="mt-1.5 font-mono text-xs text-accent">{project.context[lang]}</p>
+                  )}
+                  <p className="mt-4 max-w-3xl flex-1 leading-relaxed text-muted">{project.summary[lang]}</p>
+                  {project.stack.length > 0 && (
+                    <ul className="mt-5 flex flex-wrap gap-2">
+                      {project.stack.map((item) => (
+                        <Chip key={tr(item, "fr")} text={raw(item, lang)} />
+                      ))}
+                    </ul>
+                  )}
                   {(project.repo || project.demo) && (
                     <p className="mt-5 flex flex-wrap gap-5">
                       {project.repo && (

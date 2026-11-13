@@ -15,6 +15,8 @@ const photos = [
   { from: src("Photo Noé Godet sans fond.png"), to: out("portrait.webp"), width: 900, quality: 88 },
   { from: src("Vie Associative", "Photo de l'équipe.jpeg"), to: out("asso", "bde-team.webp") },
   { from: src("Vie Associative", "Photo de l'équipe gala.jpeg"), to: out("asso", "gala-2025-team.webp") },
+  { from: src("Vie Associative", "30ans_cercle_photo_de_groupe.JPG"), to: out("asso", "30-ans-group.webp") },
+  { from: src("Vie Associative", "30ans_cercle_photo_des_présidents.JPG"), to: out("asso", "30-ans-presidents.webp") },
   { from: src("Vie Associative", "Photo de groupe 1 challenge.jpeg"), to: out("asso", "challenge-2026-parade.webp") },
   { from: src("Vie Associative", "Photo de groupe grande Challenge.jpeg"), to: out("asso", "challenge-2026-crowd.webp") },
   { from: src("Vie Associative", "Photo de Groupe 2 Challenge.jpeg"), to: out("asso", "challenge-2026-podium.webp") },
