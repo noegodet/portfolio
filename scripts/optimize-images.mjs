@@ -27,12 +27,15 @@ const photos = [
  * Logos : convertis en version monochrome claire pour le fond sombre.
  * Les zones sombres du logo deviennent du blanc opaque, les zones claires
  * (dont un éventuel fond blanc) deviennent transparentes. `gain` renforce
- * l'opacité des logos dessinés en gris ou en couleur moyenne.
+ * l'opacité des logos dessinés en gris ou en couleur moyenne. La couleur du
+ * fond est lue dans le coin de l'image : un fond légèrement teinté (beige,
+ * gris clair) disparaît donc aussi. `trim` rogne les marges vides autour du logo.
  */
 const logos = [
   { from: src("Logo éducation", "Grenoble INP - Esisar (couleur, RVB, 120px).png"), to: out("logos", "esisar.png"), gain: 1.5 },
   { from: src("Logo éducation", "condorcet.png"), to: out("logos", "condorcet.png"), gain: 1.7, height: 240 },
   { from: src("Logo éducation", "upb_logo.png"), to: out("logos", "upb.png"), gain: 1.35, height: 320 },
+  { from: src("Logo éducation", "logo_databricks.png"), to: out("logos", "databricks.png"), gain: 1.9, trim: true },
 ];
 
 async function convertPhoto({ from, to, width = 1600, quality = 80 }) {
@@ -44,23 +47,28 @@ async function convertPhoto({ from, to, width = 1600, quality = 80 }) {
     .toFile(to);
 }
 
-async function convertLogo({ from, to, gain = 1.35, height }) {
+async function convertLogo({ from, to, gain = 1.35, height, trim = false }) {
   await mkdir(path.dirname(to), { recursive: true });
   let image = sharp(from).ensureAlpha();
   if (height) image = image.resize({ height, withoutEnlargement: true });
   const { data, info } = await image.raw().toBuffer({ resolveWithObject: true });
 
+  // Luminosité du fond : celle du premier pixel (coin haut-gauche), ou blanc s'il est transparent.
+  const background = data[3] < 128 ? 1 : (0.2126 * data[0] + 0.7152 * data[1] + 0.0722 * data[2]) / 255;
+
   for (let i = 0; i < data.length; i += 4) {
     const [r, g, b, a] = [data[i], data[i + 1], data[i + 2], data[i + 3]];
     const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-    const alpha = Math.round(a * Math.min(1, (1 - luminance) * gain));
+    // Écart avec le fond, ramené entre 0 (couleur du fond) et 1 (noir).
+    const darkness = Math.max(0, (background - luminance) / background);
+    const alpha = Math.round(a * Math.min(1, darkness * gain));
     data[i] = data[i + 1] = data[i + 2] = 255;
     data[i + 3] = alpha;
   }
 
-  await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
-    .png({ compressionLevel: 9 })
-    .toFile(to);
+  let result = sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } });
+  if (trim) result = result.trim({ threshold: 1 });
+  await result.png({ compressionLevel: 9 }).toFile(to);
 }
 
 let missing = 0;

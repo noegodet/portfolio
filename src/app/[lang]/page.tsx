@@ -184,28 +184,40 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             <SectionHeading command={t.educationCommand} title={t.educationTitle} />
           </div>
         </Reveal>
-        <ol className="mt-8 grid gap-4 lg:grid-cols-3">
+        <ol className="mt-8 grid gap-4 md:grid-cols-2">
           {education.map((school, index) => (
             <li key={school.school}>
-              <Reveal delay={index * 0.13} className="h-full">
+              <Reveal delay={(index % 2) * 0.13} className="h-full">
                 <article className="flex h-full flex-col p-6 panel">
                   <div className="flex h-16 items-center justify-between gap-4">
-                    <Image
-                      src={school.logo}
-                      alt={`Logo ${school.school}`}
-                      sizes="160px"
-                      className="h-full max-h-14 w-auto max-w-[10rem] object-contain object-left opacity-90"
-                    />
-                    {school.current && (
-                      <span className="rounded-full border border-ok/40 bg-ok/10 px-2.5 py-0.5 font-mono text-[0.7rem] text-ok">
-                        {t.current}
+                    {school.logo ? (
+                      <Image
+                        src={school.logo}
+                        alt={`Logo ${school.school}`}
+                        sizes="208px"
+                        className="h-full max-h-14 w-auto max-w-[13rem] object-contain object-left opacity-90"
+                      />
+                    ) : (
+                      // Pas de logo fourni : le nom de l'organisme, en lettres.
+                      <span className="rounded-md border border-line bg-raised/70 px-3 py-2 font-mono text-sm font-medium uppercase tracking-[0.18em] text-fg/90">
+                        {school.school}
+                      </span>
+                    )}
+                    {(school.badge || school.current) && (
+                      <span
+                        className={`shrink-0 rounded-full border px-2.5 py-0.5 font-mono text-[0.7rem] ${
+                          school.badge ? "border-warn/40 bg-warn/10 text-warn" : "border-ok/40 bg-ok/10 text-ok"
+                        }`}
+                      >
+                        {school.badge ? school.badge[lang] : t.current}
                       </span>
                     )}
                   </div>
                   <p className="mt-5 font-mono text-xs text-accent">{school.period[lang]}</p>
                   <h3 className="mt-1.5 text-lg font-semibold leading-snug">{school.title[lang]}</h3>
                   <p className="mt-1 text-sm text-muted">
-                    {school.school} · {school.city[lang]}
+                    {school.school}
+                    {school.city && ` · ${school.city[lang]}`}
                   </p>
                   {school.description && (
                     <p className="mt-4 text-sm leading-relaxed text-muted">{school.description[lang]}</p>

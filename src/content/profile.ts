@@ -1,6 +1,7 @@
 import type { StaticImageData } from "next/image";
 import type { Localized, Text } from "@/i18n/config";
 import condorcetLogo from "@/assets/logos/condorcet.png";
+import databricksLogo from "@/assets/logos/databricks.png";
 import esisarLogo from "@/assets/logos/esisar.png";
 import upbLogo from "@/assets/logos/upb.png";
 
@@ -37,10 +38,10 @@ export const profile = {
     },
     {
       label: { fr: "en ce moment", en: "right now" },
-      value: { fr: "Semestre Erasmus+ à Bucarest", en: "Erasmus+ semester in Bucharest" },
+      value: { fr: "Semestre Erasmus+ (IA et big data)", en: "Erasmus+ semester (AI and big data)" },
       detail: {
-        fr: "IA et big data · sept. 2026 – févr. 2027",
-        en: "AI and big data · Sept 2026 – Feb 2027",
+        fr: "Préparation de la certification Databricks Data Engineer Associate",
+        en: "Preparing the Databricks Data Engineer Associate certification",
       },
     },
     {
@@ -130,16 +131,21 @@ export const skills: SkillGroup[] = [
 ];
 
 /* ---------------------------------------------------------------------------
-   Formation — de la plus récente à la plus ancienne.
+   Formation et certifications — de la plus récente à la plus ancienne.
+   `logo` et `city` sont facultatifs (une certification en ligne n'en a pas) ;
+   `badge` affiche une pastille de statut, par exemple « en préparation ».
 --------------------------------------------------------------------------- */
 export type School = {
-  logo: StaticImageData;
+  logo?: StaticImageData;
   school: string;
-  city: Localized;
+  city?: Localized;
   title: Localized;
   period: Localized;
   description?: Localized;
+  /** Affiche la pastille « en cours ». */
   current?: boolean;
+  /** Pastille de statut personnalisée (remplace « en cours »). */
+  badge?: Localized;
 };
 
 export const education: School[] = [
@@ -154,6 +160,20 @@ export const education: School[] = [
       en: "Courses taught in English: neural networks, computer vision, knowledge representation and reasoning, big data analytics. Lab work in PyTorch and OpenCV.",
     },
     current: true,
+  },
+  {
+    logo: databricksLogo,
+    school: "Databricks",
+    title: {
+      fr: "Certification Databricks Data Engineer Associate",
+      en: "Databricks Data Engineer Associate certification",
+    },
+    period: { fr: "Obtention visée : janvier 2027", en: "Target: January 2027" },
+    description: {
+      fr: "Formation en autonomie aux pipelines de données sur Databricks : Spark SQL, PySpark et Delta Lake.",
+      en: "Self-paced training in building data pipelines on Databricks: Spark SQL, PySpark and Delta Lake.",
+    },
+    badge: { fr: "en préparation", en: "in progress" },
   },
   {
     logo: esisarLogo,
