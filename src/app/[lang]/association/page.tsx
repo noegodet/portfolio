@@ -124,14 +124,6 @@ export default async function AssociationPage({ params }: PageProps<"/[lang]/ass
               </Reveal>
             </li>
           ))}
-
-          <li className="relative">
-            <span
-              aria-hidden="true"
-              className="absolute -left-9 top-1 size-[0.95rem] rounded-full border-2 border-dashed border-faint bg-bg sm:-left-12 sm:size-[1.45rem]"
-            />
-            <p className="font-mono text-sm text-faint">{t.more}</p>
-          </li>
         </Timeline>
 
         <p className="mt-10 font-mono text-xs text-faint">{t.credit}</p>

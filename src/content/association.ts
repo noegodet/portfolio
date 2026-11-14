@@ -47,12 +47,12 @@ export const mandate: {
   photo: Photo;
   also: Localized[];
 } = {
-  role: { fr: "Président du BDE", en: "Student Union President" },
+  role: { fr: "Président du Cercle (BDE)", en: "President of the Cercle (Student Union)" },
   school: "Grenoble INP - Esisar",
   period: { fr: "Mai 2025 – Mai 2026", en: "May 2025 – May 2026" },
   body: {
-    fr: "Élu président du bureau des élèves, j'ai dirigé une équipe de 13 personnes au service des 500 étudiants de l'école, avec un budget annuel de plus de 100 000 €. J'ai piloté les grands événements de l'année, du gala au Challenge de l'étudiant que l'Esisar a remporté, et organisé les 30 ans de l'association. Ce mandat m'a appris à arbitrer, à travailler avec la direction et les partenaires, et à rassembler une équipe autour d'objectifs communs. C'est aussi lui qui m'a donné envie de piloter, à terme, des équipes et des projets tech, en alliant expertise d'ingénieur et management.",
-    en: "As elected president of the student union, I led a team of 13 serving the school's 500 students, with an annual budget of over €100,000. I ran the year's major events, from the gala to the Challenge de l'étudiant, which Esisar won, and organised the association's 30th anniversary. This role taught me to make trade-offs, work with school management and partners, and bring a team together around shared goals. It also made me want to lead tech teams and projects in the long run, combining engineering expertise with management skills.",
+    fr: "Une année de Cercle, c’est palpitant : des défis, des rencontres, des projets et des souvenirs pour la vie. À la tête d’une équipe de 13 personnes, j’ai fait vivre l’association pour les 500 étudiants de l’école, avec un budget de plus de 100 000 €. J’ai aussi représenté l’Esisar dans la vie associative valentinoise, aux côtés des autres BDE et de l’AVE. Ma plus grande fierté restera d'avoir ramené la Coupe du Challenge de l’étudiant à l’école, la victoire d’une équipe soudée et investie. Cette année m’a appris à fédérer et à prendre des responsabilités, et m’a donné envie de piloter à terme des équipes et des projets tech.",
+    en: "A year leading the Cercle is a thrill: challenges, new people, projects and memories for life. Heading a team of 13, I kept the association running for the school’s 500 students, on a budget of over €100,000. I also represented Esisar in Valence’s student community, alongside the other student unions and the AVE. My proudest achievement is bringing the Challenge de l’étudiant cup back to the school, a win for a close-knit, committed team. This year taught me to bring people together and take on responsibility, and made me want to lead tech teams and projects in the long run.",
   },
   photo: {
     src: bdeTeam,
@@ -95,8 +95,8 @@ export const events: AssoEvent[] = [
     date: { fr: "24 octobre 2025", en: "24 October 2025" },
     title: { fr: "Les 30 ans du BDE", en: "Student Union 30th Anniversary" },
     body: {
-      fr: "Pour les 30 ans de l'association, j'ai voulu réunir celles et ceux qui l'ont fait vivre depuis sa création. J'ai retrouvé et invité plus de 200 anciens présidents et membres des bureaux successifs, et 80 d'entre eux ont répondu présent. Cette soirée a relié plusieurs générations d'Esisariens et fait rayonner l'école auprès de ses anciens.",
-      en: "For the association's 30th anniversary, I wanted to bring together the people who had kept it alive since it was founded. I tracked down and invited more than 200 former presidents and board members, and 80 of them came. The evening connected several generations of Esisar students and strengthened the school's ties with its alumni.",
+      fr: "Pour les 30 ans de l'association, j'ai voulu réunir celles et ceux qui l'ont fait vivre depuis sa création. J'ai retrouvé et invité plus de 200 anciens présidents et membres des bureaux successifs, et 80 d'entre eux ont répondu présent. Cette soirée a relié plusieurs générations d'Esisariens et aura été source de souvenirs et de partage émouvant.",
+      en: "For the association's 30th anniversary, I wanted to bring together the people who had kept it alive since it was founded. I tracked down and invited more than 200 former presidents and board members, and 80 of them came. The evening connected several generations of Esisar students and was a source of memories and moving moments shared together.",
     },
     highlights: [],
     photos: [
@@ -121,8 +121,8 @@ export const events: AssoEvent[] = [
     date: { fr: "Mars 2026", en: "March 2026" },
     title: { fr: "36ᵉ Challenge de l'étudiant", en: "36th Challenge de l'étudiant" },
     body: {
-      fr: "Organisé chaque année à Valence par l'Association Valentinoise des Étudiants (AVE), le Challenge de l'étudiant est l'une des plus grandes compétitions inter-écoles : 17 écoles et plus de 3 000 étudiants. J'ai dirigé toute la préparation côté Esisar : communication, merch sur le thème viking, construction du char, du bar et des drapeaux, et coordination logistique avec l'AVE (escorte policière des chars, entre autres). Résultat : l'Esisar termine première au classement général et remporte la coupe du Challenge.",
-      en: "Held every year in Valence by the Association Valentinoise des Étudiants (AVE), the Challenge de l'étudiant is one of the largest inter-school competitions, with 17 schools and over 3,000 students. I led Esisar's entire preparation: communication, Viking-themed merchandise, building the school's float, bar and flags, and logistics coordination with the AVE (including police escorts for the floats). The result: Esisar finished first overall and won the Challenge cup.",
+      fr: "Organisé chaque année à Valence par l'Association Valentinoise des Étudiants (AVE), le Challenge de l'étudiant est l'une des plus grandes compétitions inter-écoles : 17 écoles et plus de 3 000 étudiants. J'ai dirigé toute la préparation côté Esisar : communication, merch sur le thème « Clash of Clans », construction du char, du bar et des drapeaux, et coordination logistique avec l'AVE (escorte policière des chars, entre autres). Résultat : l'Esisar termine première au classement général et remporte la coupe du Challenge.",
+      en: "Held every year in Valence by the Association Valentinoise des Étudiants (AVE), the Challenge de l'étudiant is one of the largest inter-school competitions, with 17 schools and over 3,000 students. I led Esisar's entire preparation: communication, Clash of Clans-themed merchandise, building the school's float, bar and flags, and logistics coordination with the AVE (including police escorts for the floats). The result: Esisar finished first overall and won the Challenge cup.",
     },
     highlights: [],
     photos: [
@@ -153,8 +153,8 @@ export const events: AssoEvent[] = [
       {
         src: challengeParade,
         alt: {
-          fr: "La délégation de l'Esisar déguisée en Vikings sur les marches d'un théâtre.",
-          en: "The Esisar delegation dressed as Vikings on the steps of a theatre.",
+          fr: "La délégation de l'Esisar costumée (casques à cornes et épées) sur les marches d'un théâtre.",
+          en: "The Esisar delegation in costume (horned helmets and swords) on the steps of a theatre.",
         },
         credit: leChauve,
       },
