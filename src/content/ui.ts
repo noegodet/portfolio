@@ -50,7 +50,6 @@ const fr = {
     title: "Vie associative",
     intro:
       "Une année de présidence du bureau des élèves, et les événements qui l'ont jalonnée.",
-    also: "Également",
     roadmapTitle: "Roadmap des événements",
     draft: "Texte provisoire — à compléter",
     photos: "Photos",
@@ -162,7 +161,6 @@ const en: typeof fr = {
     command: "association --roadmap",
     title: "Student life",
     intro: "One year as president of the student union, and the events that marked it.",
-    also: "Also",
     roadmapTitle: "Event roadmap",
     draft: "Draft text — to be completed",
     photos: "Photos",

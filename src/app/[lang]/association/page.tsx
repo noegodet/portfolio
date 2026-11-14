@@ -45,17 +45,6 @@ export default async function AssociationPage({ params }: PageProps<"/[lang]/ass
                 <DraftTag label={t.draft} />
               </div>
             )}
-            <h3 className="mt-7 label-mono">{t.also}</h3>
-            <ul className="mt-2 space-y-1 text-sm text-muted">
-              {mandate.also.map((item) => (
-                <li key={item.fr} className="flex gap-2">
-                  <span className="text-accent" aria-hidden="true">
-                    ▸
-                  </span>
-                  {item[lang]}
-                </li>
-              ))}
-            </ul>
           </div>
           <Image
             src={mandate.photo.src}

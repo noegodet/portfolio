@@ -45,7 +45,6 @@ export const mandate: {
   body: Localized;
   draft?: boolean;
   photo: Photo;
-  also: Localized[];
 } = {
   role: { fr: "Président du Cercle (BDE)", en: "President of the Cercle (Student Union)" },
   school: "Grenoble INP - Esisar",
@@ -61,11 +60,6 @@ export const mandate: {
       en: "The Esisar student union team in their purple jackets.",
     },
   },
-  /** Autres engagements, repris du CV. */
-  also: [
-    { fr: "Délégué de classe", en: "Class representative" },
-    { fr: "Membre actif du bureau des sports", en: "Active member of the sports committee" },
-  ],
 };
 
 const leChauve = "Le Chauve";
