@@ -65,12 +65,12 @@ const RAM_REACH_MIN = 26; // avancée d'un coup sans charge
 const RAM_REACH_MAX = 68; // avancée d'un coup à pleine charge
 const CHARGE_TIME = 1.0; // s pour une charge complète
 
-const HALL_W = 560;
-const HALL_H = (336 * HALL_W) / 760;
-const HALL_X = VIEW_W - HALL_W - 16;
+const HALL_W = 548;
+const HALL_H = (SPRITE_LAYOUT.hall.height * HALL_W) / SPRITE_LAYOUT.hall.width;
+const HALL_X = VIEW_W - HALL_W - 8;
 const HALL_Y = GROUND_Y + 8 - HALL_H;
-/** Façade : bord gauche des murs (le toit déborde davantage, mais plus haut). */
-const FACE_X = HALL_X + 40;
+/** Façade : bord gauche du mur de l'aile (le toit, plus haut, est en retrait). */
+const FACE_X = HALL_X + (SPRITE_LAYOUT.hall.faceX * HALL_W) / SPRITE_LAYOUT.hall.width;
 const HALL_HP = 100;
 
 const CUP_H = 240;
@@ -420,8 +420,8 @@ export class ChallengeEngine {
     // Gros morceaux de toit aux paliers de dégâts.
     if (this.hp <= this.nextChunkAt) {
       this.nextChunkAt -= 33;
-      const cx = rand(0.05, 0.5) * this.hallLayer.width;
-      const cy = rand(0.05, 0.3) * this.hallLayer.height;
+      const cx = rand(0.15, 0.5) * this.hallLayer.width;
+      const cy = rand(0.08, 0.3) * this.hallLayer.height;
       for (let i = 0; i < 6; i++) this.carve(cx + rand(-40, 40) * k, cy + rand(-20, 20) * k, rand(20, 34) * k);
       this.spawnDebris(HALL_X + cx / k, HALL_Y + cy / k, 26, 260, true);
     }

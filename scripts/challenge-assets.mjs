@@ -207,43 +207,107 @@ const layout = {};
 }
 
 /* --------------------------------------------------------------- Halle ---
-   On ne garde que le bâtiment (le jeu dessine son propre ciel et son sol) :
-   - recadrage sur le bâtiment, sans le tronc d'arbre ni la pelouse ;
-   - ciel et nuages retirés ;
-   - le feuillage qui passe devant les murs est remplacé par la couleur du mur
-     voisin (on prolonge la ligne depuis la droite), et retiré devant le ciel. */
+   L'image source est presque symétrique, mais un arbre cache l'aile gauche.
+   La halle est donc reconstruite à partir de sa moitié droite :
+   - ciel et nuages retirés, y compris le ciel visible entre les poutres ;
+   - les buissons devant le bardage sont remplacés par le bardage situé
+     au-dessus (les rainures verticales se prolongent) ;
+   - l'aile droite est raccourcie d'une travée (une fenêtre) pour que la halle
+     tienne dans l'écran du jeu sans rapetisser ;
+   - la moitié gauche est le miroir de la droite, sauf la rotonde vitrée,
+     gardée d'origine pour que les panneaux « ENTRÉE » restent lisibles. */
 {
   const full = await load(src("halle.png"));
-  const X0 = 140, Y0 = 105, ROOF_BOTTOM = 300;
-  const hall = crop(full, X0, Y0, 1012, 494);
-  const isSky = (r, g, b) => b > r + 25 && b > g - 10;
+  const AXIS = 500.5; // axe de symétrie mesuré sur le toit et le vitrage
+  const RIGHT = Math.ceil(AXIS); // première colonne de la moitié droite
+  const Y0 = 105, Y1 = 494; // du haut du toit au pied des murs
+  const X_END = 1011; // bord droit du mur beige (au-delà : un arbre, un autre bâtiment)
+  const WALL_TOP = 318; // haut des murs des ailes
+  const GLASS = { x0: 328, x1: 672, y0: 290 }; // façade vitrée : ses reflets de ciel restent
+  const ROTUNDA_X0 = 378; // rotonde gardée d'origine, de ce bord jusqu'à l'axe
+  const CUT = { x0: 869, width: 68 }; // travée retirée (4 rainures de 17 px)
+  // Ciel : bleu clair. Sans le seuil de luminosité, l'acier bleuté sous le toit
+  // partait avec le ciel et la halle avait l'air déjà cassée.
+  const isSky = (r, g, b) => b > r + 25 && b > g - 10 && b > 140;
+  // Ciel franc ou ciel pâle près de l'horizon : jamais sur l'acier du toit (b - r ≤ 30).
+  const isDeepSky = (r, g, b) => (b - r >= 60 && b > 150) || (b - r > 32 && b > 175);
   const isCloud = (r, g, b) => Math.min(r, g, b) > 205 && Math.max(r, g, b) - Math.min(r, g, b) < 40;
-  const isFoliage = (r, g, b) => (g > r + 15 && g > b + 5) || (r < 115 && r > g && g > b && r - b > 22);
+  const isFoliage = (r, g, b) => g > r + 15 && g > b + 5;
 
-  // Sous le toit : on bouche le feuillage avec le mur situé à sa droite.
-  const { data, width, height } = hall;
-  for (let y = ROOF_BOTTOM - Y0; y < height; y++) {
-    let fill = null;
-    for (let x = width - 1; x >= 0; x--) {
-      const i = (y * width + x) * 4;
-      if (isFoliage(data[i], data[i + 1], data[i + 2])) {
-        if (fill) data.set(fill, i);
-        else data[i + 3] = 0;
-      } else fill = data.subarray(i, i + 4).slice();
+  const { data, width: W } = full;
+  const at = (x, y) => (y * W + x) * 4;
+
+  // Ciel entre les poutres et les poteaux (poches non reliées au bord de l'image).
+  for (let y = Y0; y < WALL_TOP; y++)
+    for (let x = RIGHT; x < X_END; x++) {
+      if (y >= GLASS.y0 && x < GLASS.x1) continue;
+      const i = at(x, y);
+      if (isDeepSky(data[i], data[i + 1], data[i + 2])) data[i + 3] = 0;
+    }
+  // Buissons au pied des murs : on recopie le pixel du dessus.
+  for (let y = 430; y < Y1; y++)
+    for (let x = RIGHT; x < X_END; x++) {
+      const i = at(x, y);
+      if (isFoliage(data[i], data[i + 1], data[i + 2])) data.copy(data, i, at(x, y - 1), at(x, y - 1) + 4);
+    }
+
+  // Assemblage : moitié droite (sans la travée retirée) et son miroir.
+  const half = X_END - CUT.width - RIGHT;
+  const hall = { width: 2 * half, height: Y1 - Y0, data: Buffer.alloc(2 * half * (Y1 - Y0) * 4) };
+  const sourceX = (offset) => {
+    const x = RIGHT + offset;
+    return x >= CUT.x0 ? x + CUT.width : x;
+  };
+  for (let y = 0; y < hall.height; y++) {
+    const sy = Y0 + y;
+    for (let u = 0; u < hall.width; u++) {
+      let sx;
+      if (u >= half) sx = sourceX(u - half);
+      else {
+        const offset = half - 1 - u;
+        const original = RIGHT - 1 - offset; // symétrique exact de RIGHT + offset
+        sx = sy >= GLASS.y0 && original >= ROTUNDA_X0 ? original : sourceX(offset);
+      }
+      data.copy(hall.data, (y * hall.width + u) * 4, at(sx, sy), at(sx, sy) + 4);
     }
   }
-  // Le bout de mur caché derrière l'arbre (à gauche) est retiré sous le toit.
-  const WALL_LEFT = 200 - X0;
-  for (let y = ROOF_BOTTOM - Y0; y < height; y++)
-    for (let x = 0; x < WALL_LEFT; x++) data[(y * width + x) * 4 + 3] = 0;
 
-  // Au-dessus : ciel, nuages et feuillage disparaissent.
-  floodClear(hall, (r, g, b, x, y) =>
-    isSky(r, g, b) || isFoliage(r, g, b) || (y < ROOF_BOTTOM - Y0 && isCloud(r, g, b)),
+  // Ciel, nuages et restes de feuillage reliés au bord disparaissent. Le bas de
+  // l'image (pied des murs) n'est pas un point de départ : sinon des reflets
+  // bleutés du bardage et des portes se transformaient en trous.
+  const seeds = borderSeeds(hall.width, hall.height).filter(([, y]) => y < hall.height - 1);
+  floodClear(
+    hall,
+    (r, g, b, x, y) => isSky(r, g, b) || isFoliage(r, g, b) || (y < WALL_TOP - Y0 && isCloud(r, g, b)),
+    seeds,
   );
+  // Pixels isolés (restes d'anticrénelage du ciel) : retirés.
+  for (let pass = 0; pass < 2; pass++)
+    for (let y = 0; y < hall.height; y++)
+      for (let x = 0; x < hall.width; x++) {
+        const i = (y * hall.width + x) * 4;
+        if (!hall.data[i + 3]) continue;
+        let neighbours = 0;
+        for (const [nx, ny] of [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]])
+          if (nx >= 0 && ny >= 0 && nx < hall.width && ny < hall.height && hall.data[(ny * hall.width + nx) * 4 + 3])
+            neighbours++;
+        if (neighbours <= 1) hall.data[i + 3] = 0;
+      }
   keepLargest(hall);
   const box = bounds(hall);
-  await save(crop(hall, box.x0, box.y0, box.x1, box.y1), out("hall.png"), 760);
+  const final = crop(hall, box.x0, box.y0, box.x1, box.y1);
+
+  // Façade frappée par le bélier : bord gauche des murs, à mi-hauteur basse.
+  const lefts = [];
+  for (let y = Math.round(final.height * 0.55); y < final.height * 0.95; y++)
+    for (let x = 0; x < final.width; x++)
+      if (final.data[(y * final.width + x) * 4 + 3]) {
+        lefts.push(x);
+        break;
+      }
+  lefts.sort((a, b) => a - b);
+  layout.hall = { width: final.width, height: final.height, faceX: lefts[Math.floor(lefts.length / 2)] };
+  await save(final, out("hall.png"));
 }
 
 /* --------------------------------------------------------------- Coupe ---

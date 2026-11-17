@@ -21,6 +21,11 @@ export const SPRITE_LAYOUT = {
       }
     ]
   },
+  "hall": {
+    "width": 884,
+    "height": 385,
+    "faceX": 0
+  },
   "cup": {
     "centerX": 0.49850299401197606,
     "centerY": 0.4993215739484396
