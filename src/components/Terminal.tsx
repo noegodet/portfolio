@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
   createContext,
@@ -21,6 +22,7 @@ import { Icon } from "./ui";
 export type TerminalData = {
   lang: Locale;
   dict: Dictionary["terminal"];
+  challenge: Dictionary["challenge"];
   whoami: string[];
   skills: { title: string; items: string }[];
   contact: { label: string; text: string; href: string }[];
@@ -52,11 +54,19 @@ const commands = {
   lang: ["lang", "langue", "language"],
   clear: ["clear", "cls"],
   exit: ["exit", "quit", "close"],
+  challenge: ["challenge"],
 } as const;
 
 type Command = keyof typeof commands;
 
 const commandNames = Object.keys(commands) as Command[];
+
+/** Commandes secrètes (easter eggs) : absentes de l'aide et de l'autocomplétion. */
+const hiddenCommands: Command[] = ["challenge"];
+const visibleCommands = commandNames.filter((name) => !hiddenCommands.includes(name));
+
+/** Le mini-jeu n'est téléchargé que lorsque quelqu'un le lance. */
+const ChallengeGame = dynamic(() => import("./challenge/ChallengeGame"), { ssr: false });
 
 const suggestions: Command[] = ["whoami", "experience", "asso", "projects", "contact", "cv", "help"];
 
@@ -85,6 +95,8 @@ export function TerminalProvider({ data, children }: { data: TerminalData; child
   const [lines, setLines] = useState<Line[]>([]);
   const [value, setValue] = useState("");
   const [history, setHistory] = useState<string[]>([]);
+  const [gameOpen, setGameOpen] = useState(false);
+  const closeGame = useCallback(() => setGameOpen(false), []);
   const [historyIndex, setHistoryIndex] = useState<number | null>(null);
 
   const open = useCallback(() => {
@@ -151,7 +163,7 @@ export function TerminalProvider({ data, children }: { data: TerminalData; child
 
       switch (command) {
         case "help":
-          print(...commandNames.map((name) => ({ kind: "row" as const, label: name, text: dict.help[name] })));
+          print(...visibleCommands.map((name) => ({ kind: "row" as const, label: name, text: dict.help[name as keyof typeof dict.help] })));
           break;
         case "whoami":
           print(...data.whoami.map((line) => ({ kind: "text" as const, text: line })));
@@ -195,6 +207,13 @@ export function TerminalProvider({ data, children }: { data: TerminalData; child
           closeTimer.current = setTimeout(close, 450);
           break;
         }
+        case "challenge":
+          print({ kind: "success", text: dict.challengeLaunch });
+          closeTimer.current = setTimeout(() => {
+            close();
+            setGameOpen(true);
+          }, 350);
+          break;
         case "exit":
           close();
           break;
@@ -212,7 +231,7 @@ export function TerminalProvider({ data, children }: { data: TerminalData; child
 
   const onInputKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Tab" && value.trim()) {
-      const matches = commandNames.filter((name) => name.startsWith(value.trim().toLowerCase()));
+      const matches = visibleCommands.filter((name) => name.startsWith(value.trim().toLowerCase()));
       if (matches.length === 1) {
         event.preventDefault();
         setValue(matches[0] === "lang" ? "lang " : matches[0]);
@@ -315,6 +334,7 @@ export function TerminalProvider({ data, children }: { data: TerminalData; child
           <p className="mt-3 hidden font-mono text-[0.7rem] text-faint sm:block">{dict.hint}</p>
         </div>
       </dialog>
+      {gameOpen && <ChallengeGame dict={data.challenge} onClose={closeGame} />}
     </TerminalContext>
   );
 }

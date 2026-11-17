@@ -44,6 +44,7 @@ function terminalData(lang: Locale): TerminalData {
   return {
     lang,
     dict: dict.terminal,
+    challenge: dict.challenge,
     whoami: [
       `${profile.name} — ${profile.role[lang]}`,
       `${profile.facts[0].value[lang]}, ${profile.facts[0].detail[lang]}`,
